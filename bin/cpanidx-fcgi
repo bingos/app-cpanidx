@@ -1,0 +1,136 @@
+#!perl
+
+use strict;
+use warnings;
+use DBI;
+use FCGI;
+use YAML::Tiny;
+use JSON::XS;
+use XML::Simple;
+use HTML::Tiny;
+use Config::Tiny;
+use Getopt::Long;
+
+my $config = 'cpanidx.ini';
+
+GetOptions( 'config=s', \$config, );
+
+my $ini = Config::Tiny->new();
+
+my $cfg = $ini->read( $config ) or die $ini->errstr, "\n";
+
+my $port = $cfg->{_}->{socket};
+my $dsn = $cfg->{_}->{dsn};
+my $user = $cfg->{_}->{user};
+my $pass = $cfg->{_}->{pass};
+
+die "No 'socket' was specified in the config file '$config', aborting\n" unless $port;
+die "No 'dsn' was specified in the config file '$config', aborting\n" unless $dsn;
+
+my %queries = (
+  'mod' => [ 'select mods.mod_name,mods.mod_vers,mods.cpan_id,dists.dist_name,dists.dist_vers,dists.dist_file from mods,dists where mod_name = ? and mods.dist_name = dists.dist_name', 1 ],
+  'auth' => [ 'select * from auths where cpan_id = ?', 1 ],
+  'dists' => [ 'select * from dists where cpan_id = ?', 1 ],
+  'timestamp' => [ 'select * from timestamp', 0 ],
+  'firstmod' => [ 'select mod_name from mods order by mod_name limit 1', 0 ],
+  'nextmod' => [ 'select mod_name from mods order by mod_name limit ?,1', 1 ],
+  'firstauth' => [ 'select cpan_id from auths order by cpan_id limit 1', 0 ],
+  'nextauth' => [ 'select cpan_id from auths order by cpan_id limit ?,1', 1 ],
+  'modkeys'  => [ 'select mod_name from mods order by mod_name', 0 ],
+  'authkeys' => [ 'select cpan_id from auths order by cpan_id', 0 ],
+);
+
+my $dbh = DBI->connect($dsn,$user,$pass) or die $DBI::errstr, "\n";
+
+my $SEPARATOR = qr/ :: | ' /x;
+our $module_re = qr/[[:alpha:]_] \w* (?: $SEPARATOR \w+ )*/xo;
+
+my $socket = FCGI::OpenSocket( $port, 5 );
+my $request = FCGI::Request( \*STDIN, \*STDOUT, \*STDERR,
+    \%ENV, $socket );
+
+FCGI: while( $request->Accept() >= 0 ) {
+  my $path = $ENV{'REQUEST_URI'};
+  my ($root,$enc,$type,$search) = grep { $_ } split m#/#, $path;
+  $search = '0' if $type =~ /^next/ and !$search;
+  my @results = _search_db( $type, $search );
+  $enc = 'yaml' unless $enc and $enc =~ /^(yaml|json|xml|html)$/i;
+  my $string;
+SWITCH: {
+  if ( $enc eq 'html' ) {
+    print "Content-type: text/html\r\n\r\n";
+    $string = gen_html( @results );
+    last SWITCH;
+  }
+  if ( $enc eq 'xml' ) {
+    my %data;
+    $data{$type} = \@results;
+    eval { $string = XMLout(\%data, RootName => 'results' ); };
+    print "Content-type: application/xml; charset=utf-8\r\n\r\n";
+    last SWITCH;
+  }
+  if ( $enc eq 'json' ) {
+    eval { $string = encode_json( \@results ); };
+    print "Content-type: application/json; charset=utf-8\r\n\r\n";
+    last SWITCH;
+  }
+  eval { $string = YAML::Tiny::Dump(\@results); };
+  print "Content-type: application/x-yaml; charset=utf-8\r\n\r\n";
+  }
+  print $string;
+}
+
+FCGI::CloseSocket( $socket );
+exit 0;
+
+sub is_valid_mod {
+  my $module = shift;
+  return $module =~ /\A $module_re \z/xo;
+}
+
+sub _search_db {
+  my ($type,$search) = @_;
+  my @results;
+  if ( my $sql = $queries{ $type } ) {
+    if ( $type eq 'mod' and !is_valid_mod( $search ) ) {
+      return @results;
+    }
+    # send query to dbi
+    my $sth = $dbh->prepare_cached( $sql->[0] ) or die $DBI::errstr, "\n";
+    $sth->execute( ( $sql->[1] ? $search : () ) );
+    while ( my $row = $sth->fetchrow_hashref() ) {
+       push @results, { %{ $row } };
+    }
+  }
+  return @results;
+}
+
+sub gen_html {
+  my @results = @_;
+  my $h = HTML::Tiny->new();
+  my $data;
+  if ( !scalar @results ) {
+    $data = $h->p('There were no results, sorry');
+  }
+  else {
+    my @th = sort keys %{ $results[0] };
+    $data = $h->table( { border => 1, cellspacing => 0, width => '100%' },
+          [
+            \'tr',
+            [ \'th', @th  ],
+            map { my $href = $_;
+               [ \'td', map { $href->{$_} } sort keys %$href ] } @results,
+          ]
+    );
+  }
+  return $h->html(
+    [
+      $h->head( $h->title( 'Results' ) ),
+      $h->body(
+        [
+          $data
+        ]
+      )
+    ]
+  );
+}
