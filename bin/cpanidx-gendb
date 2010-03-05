@@ -170,7 +170,7 @@ foreach my $file ( $mailurl, $packurl ) {
 sub poll_server {
   my $url = shift;
   my $uri = URI->new($url);
-  $uri->path_segments( grep { $_ } $uri->path_segments ), 'yaml', 'timestamp' );
+  $uri->path_segments( ( grep { $_ } $uri->path_segments ), 'yaml', 'timestamp' );
   my $string;
   my $ff = File::Fetch->new( uri => $uri->as_string );
   $ff->fetch( to => \$string );
