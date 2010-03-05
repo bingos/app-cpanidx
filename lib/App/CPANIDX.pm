@@ -5,7 +5,7 @@ use warnings;
 
 use vars qw($VERSION);
 
-$VERSION = '0.02';
+$VERSION = '0.04';
 
 1;
 
@@ -241,7 +241,7 @@ The timestamp is in epoch time.
 
 =item C<topten>
 
-Does no take a search term. Returns a list of the authors with the most distributions. This is not the
+Does not take a search term. Returns a list of the authors with the most distributions. This is not the
 most accurate, try L<http://thegestalt.org/simon/perl/wholecpan.html> for a more accurate leaderboard.
 
   curl -i http://name.of.website/cpanidx/yaml/topten

@@ -205,7 +205,7 @@ INTERFACE
                 timestamp: 1267700434
 
         "topten"
-            Does no take a search term. Returns a list of the authors with
+            Does not take a search term. Returns a list of the authors with
             the most distributions. This is not the most accurate, try
             <http://thegestalt.org/simon/perl/wholecpan.html> for a more
             accurate leaderboard.
