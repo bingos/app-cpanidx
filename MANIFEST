@@ -19,6 +19,7 @@ inc/Module/Install/WriteAll.pm
 lib/App/CPANIDX.pm
 lib/App/CPANIDX/Queries.pm
 lib/App/CPANIDX/Renderer.pm
+lib/App/CPANIDX/Tables.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
@@ -27,6 +28,7 @@ README
 t/00_compile.t
 t/01_renderer.t
 t/02_queries.t
+t/03_tables.t
 t/99_pod.t
 t/99_pod_coverage.t
 tools/git-log.pl

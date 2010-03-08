@@ -1,3 +1,19 @@
+==============================
+2010-03-05 22:48:51 +0000 0.04
+==============================
+
+  commit e7cb1d37370638858d03b4f7d5b6919ee0eb340b
+  Author: Chris Williams <chris@bingosnet.co.uk>
+  Date:   Fri Mar 5 22:48:51 2010 +0000
+  
+    Fixed compile error
+
+  commit f96c1ab41925d8b12885d3c341539637b219e7a2
+  Author: Chris Williams <chris@bingosnet.co.uk>
+  Date:   Fri Mar 5 22:39:03 2010 +0000
+  
+    Refactored stuff into modules 
+
 ==============
 End of Excerpt
 ==============
