@@ -36,7 +36,8 @@ FCGI: while( $request->Accept() >= 0 ) {
   my ($root,$enc,$type,$search) = grep { $_ } split m#/#, $path;
   $search = '0' if $type =~ /^next/ and !$search;
   my @results = _search_db( $type, $search );
-  $enc = 'yaml' unless $enc and $enc =~ /^(yaml|json|xml|html)$/i;
+  #$enc = 'yaml' unless $enc and $enc =~ /^(yaml|json|xml|html)$/i;
+  $enc = 'yaml' unless $enc and grep { lc($enc) eq $_ } App::CPANIDX::Renderer->renderers();
   my $ren = App::CPANIDX::Renderer->new( \@results, $enc );
   my ($ctype, $string) = $ren->render( $type );
   print "Content-type: $ctype\r\n\r\n";

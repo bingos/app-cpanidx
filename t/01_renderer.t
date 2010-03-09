@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use App::CPANIDX::Renderer;
 
 my $data = [
@@ -17,6 +17,11 @@ my %types = (
   'xml',  'application/xml; charset=utf-8',
   'html', 'text/html',
 );
+
+my @enc = App::CPANIDX::Renderer->renderers();
+my @types = sort keys %types;
+
+is_deeply( \@enc, \@types, 'We got the right renderers back' );
 
 foreach my $enc ( qw(yaml json xml html) ) {
   my $ren = App::CPANIDX::Renderer->new( $data, $enc );

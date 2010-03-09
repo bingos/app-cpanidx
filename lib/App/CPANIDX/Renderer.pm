@@ -8,7 +8,7 @@ use XML::Simple;
 use HTML::Tiny;
 use vars qw[$VERSION];
 
-$VERSION = '0.06';
+$VERSION = '0.08';
 
 my %types = (
   'yaml', 'application/x-yaml; charset=utf-8',
@@ -44,6 +44,10 @@ my %renderers = (
                 return _gen_html( @{ $ref } );; 
           },
 );
+
+sub renderers {
+  return sort keys %renderers;
+}
 
 sub new {
   my $package = shift;
@@ -104,6 +108,8 @@ App::CPANIDX::Renderer - Generates web content for App::CPANIDX
 
 =head1 SYNOPSIS
 
+  my @types = App::CPANIDX::Renderer->renderers;
+
   my $ren = App::CPANIDX::Renderer->new( \@data, 'yaml' );
 
   my ($content_type, $content) = $ren->render();
@@ -121,6 +127,18 @@ App::CPANIDX::Renderer renders web content for L<App::CPANIDX>.
 Returns a new App::CPANIDX::Renderer object. Takes two parameters, an arrayref of 
 data to be rendered, which is required, and the format, either C<yaml>, C<json>, C<xml>
 or C<html>, to render to, which defaults to C<yaml>.
+
+=back
+
+=head1 CLASS METHODS
+
+=over
+
+=item C<renderers>
+
+Returns a list of the supported renderers.
+
+  my @types = App::CPANIDX::Renderer->renderers;
 
 =back
 
