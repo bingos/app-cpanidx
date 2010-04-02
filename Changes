@@ -1,4 +1,37 @@
 ==============================
+2010-04-02 23:10:21 +0100 0.10
+==============================
+
+  commit 300d14584aea5ba4165e451b8f920a4020586325
+  Author: Chris Williams <chris@bingosnet.co.uk>
+  Date:   Fri Apr 2 23:10:21 2010 +0100
+  
+    Bump version
+
+  commit d4d40db356c77c777978f8a9789409872c7fc09d
+  Author: Chris Williams <chris@bingosnet.co.uk>
+  Date:   Fri Apr 2 23:07:07 2010 +0100
+  
+    Amended table tests
+
+  commit ad81bcaa43975d4b03eb16ba96f65761bbc1271b
+  Author: apocalypse <perl@0ne.us>
+  Date:   Fri Apr 2 22:53:08 2010 +0100
+  
+    Applied patches RT #56214 "cpanidx-gendb is slow when building the
+    SQLite db" 
+
+==============================
+2010-03-09 16:10:16 +0000 0.08
+==============================
+
+  commit f7c6ccc2550d2fc7808346f11b9eb56eaa91f555
+  Author: Chris Williams <chris@bingosnet.co.uk>
+  Date:   Tue Mar 9 16:10:16 2010 +0000
+  
+    Added App::CPANIDX::Renderer renderers() class method 
+
+==============================
 2010-03-08 14:01:45 +0000 0.06
 ==============================
 

@@ -41,7 +41,9 @@ my $idxdir = _cpanidx_dir();
 mkpath( $idxdir ) unless -d $idxdir;
 fetch_indexes($idxdir,$mirror,$mailrc_file,$packages_file);
 my $dbh = DBI->connect($dsn,$user,$pass);
-$dbh->do(qq{PRAGMA synchronous = OFF}) or die $dbh->errstr;
+if ( $dsn =~ /^dbi\:SQLite/i ) {
+  $dbh->do(qq{PRAGMA synchronous = OFF}) or die $dbh->errstr;
+}
 print "Populating auths ... ";
 populate_auths($dbh,$idxdir,$mailrc_file);
 print "DONE\nPopulating dists and mods ... ";
