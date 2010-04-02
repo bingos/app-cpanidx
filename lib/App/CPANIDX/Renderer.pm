@@ -8,7 +8,7 @@ use XML::Simple;
 use HTML::Tiny;
 use vars qw[$VERSION];
 
-$VERSION = '0.08';
+$VERSION = '0.10';
 
 my %types = (
   'yaml', 'application/x-yaml; charset=utf-8',
