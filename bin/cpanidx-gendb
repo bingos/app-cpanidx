@@ -41,6 +41,7 @@ my $idxdir = _cpanidx_dir();
 mkpath( $idxdir ) unless -d $idxdir;
 fetch_indexes($idxdir,$mirror,$mailrc_file,$packages_file);
 my $dbh = DBI->connect($dsn,$user,$pass);
+$dbh->do(qq{PRAGMA synchronous = OFF}) or die $dbh->errstr;
 print "Populating auths ... ";
 populate_auths($dbh,$idxdir,$mailrc_file);
 print "DONE\nPopulating dists and mods ... ";
@@ -89,16 +90,33 @@ sub populate_dists {
     }
     push @mods, [ $module, $d->dist, $d->version, $d->cpanid, $version ];
   }
-  create_table( $handle, 'dists' );
+
+  $handle->begin_work;
+
+  create_table( $handle, 'tmp_dists' );
   foreach my $dist ( keys %dists ) {
-      my $sth = $handle->prepare_cached(qq{INSERT INTO dists values (?,?,?,?)}) or die $handle->errstr;
+      my $sth = $handle->prepare_cached(qq{INSERT INTO tmp_dists values (?,?,?,?)}) or die $handle->errstr;
       $sth->execute( @{ $dists{ $dist } } );
   }
-  create_table( $handle, 'mods' );
+  create_table( $handle, 'tmp_mods' );
   foreach my $mod ( @mods ) {
-    my $sth = $handle->prepare_cached(qq{INSERT INTO mods values (?,?,?,?,?)}) or die $handle->errstr;
+    my $sth = $handle->prepare_cached(qq{INSERT INTO tmp_mods values (?,?,?,?,?)}) or die $handle->errstr;
     $sth->execute( @{ $mod } );
   }
+
+  $handle->do(qq{DROP TABLE IF EXISTS dists}) or die $handle->errstr;
+  $handle->do(qq{ALTER TABLE tmp_dists RENAME TO dists}) or die $handle->errstr;
+  $handle->do(qq{DROP TABLE IF EXISTS mods}) or die $handle->errstr;
+  $handle->do(qq{ALTER TABLE tmp_mods RENAME TO mods}) or die $handle->errstr;
+
+  foreach my $table ( qw( dists mods ) ) {
+    foreach my $sql ( @{ App::CPANIDX::Tables->index( $table ) } ) {
+      $handle->do( $sql ) or die $handle->errstr;
+    }
+  }
+
+  $handle->commit;
+
   return 1;
 }
 
@@ -114,32 +132,45 @@ sub populate_auths {
     my ($name, $email) = $long =~ /(.*) <(.+)>$/;
     push @auths, [ $pauseid, $name, $email ];
   }
-  create_table( $handle, 'auths' );
+
+  $handle->begin_work;
+
+  create_table( $handle, 'tmp_auths' );
   foreach my $auth ( @auths ) {
-    my $sth = $handle->prepare_cached(qq{INSERT INTO auths values (?,?,?)}) or die $handle->errstr;
+    my $sth = $handle->prepare_cached(qq{INSERT INTO tmp_auths values (?,?,?)}) or die $handle->errstr;
     $sth->execute( @{ $auth } ) or die $handle->errstr;
   }
+
+  $handle->do(qq{DROP TABLE IF EXISTS auths}) or die $handle->errstr;
+  $handle->do(qq{ALTER TABLE tmp_auths RENAME TO auths}) or die $handle->errstr;
+
+  foreach my $sql ( @{ App::CPANIDX::Tables->index( 'auths' ) } ) {
+    $handle->do( $sql ) or die $handle->errstr;
+  }
+
+  $handle->commit;
+
   return 1;
 }
 
 sub fetch_indexes {
-my ($location,$mirror,$mailrc,$packages) = @_;
+  my ($location,$mirror,$mailrc,$packages) = @_;
 
-my $mailurl = URI->new($mirror);
-my $packurl = URI->new($mirror);
+  my $mailurl = URI->new($mirror);
+  my $packurl = URI->new($mirror);
 
-$mailurl->path_segments( ( grep { $_ } $mailurl->path_segments ), 'authors', $mailrc );
-$packurl->path_segments( ( grep { $_ } $packurl->path_segments ), 'modules', $packages );
+  $mailurl->path_segments( ( grep { $_ } $mailurl->path_segments ), 'authors', $mailrc );
+  $packurl->path_segments( ( grep { $_ } $packurl->path_segments ), 'modules', $packages );
 
-foreach my $file ( $mailurl, $packurl ) {
-  my $url = $file->as_string;
-  print "Fetching '$url' to '$location'\n";
-  my $ff = File::Fetch->new( uri => $url );
-  print $ff->output_file, "\n";
-  my $stat = $ff->fetch( to => $location );
-  next unless $stat;
-  print "Downloaded '$url' to '$stat'\n";
-}
+  foreach my $file ( $mailurl, $packurl ) {
+    my $url = $file->as_string;
+    print "Fetching '$url' to '$location'\n";
+    my $ff = File::Fetch->new( uri => $url );
+    print $ff->output_file, "\n";
+    my $stat = $ff->fetch( to => $location );
+    next unless $stat;
+    print "Downloaded '$url' to '$stat'\n";
+  }
 }
 
 sub poll_server {

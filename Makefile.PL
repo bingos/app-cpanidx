@@ -6,7 +6,7 @@ version_from 'lib/App/CPANIDX.pm';
 abstract_from 'lib/App/CPANIDX.pm';
 readme_from 'lib/App/CPANIDX.pm';
 license 'perl';
-auto_license holder => 'Chris Williams';
+auto_license holder => 'Chris Williams and Apocalypse';
 perl_version '5.006';
 build_requires 'Test::More' => 0.47;
 requires 'CPAN::DistnameInfo' => '0.09';
