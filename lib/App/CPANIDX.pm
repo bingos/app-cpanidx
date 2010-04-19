@@ -5,7 +5,7 @@ use warnings;
 
 use vars qw($VERSION);
 
-$VERSION = '0.13_01';
+$VERSION = '0.14';
 
 1;
 
@@ -283,6 +283,62 @@ most accurate, try L<http://thegestalt.org/simon/perl/wholecpan.html> for a more
   -
     cpan_id: MARCEL
     dists: 114
+
+=item C<mirrors>
+
+Does not take a search term. Returns a list of CPAN mirror sites as listed in the C<MIRRORED.BY> file.
+
+  curl -i http://name.of.website/cpanidx/yaml/mirrors
+
+  HTTP/1.1 200 OK
+  Content-type: application/x-yaml; charset=utf-8
+  Transfer-Encoding: chunked
+  Date: Mon, 19 Apr 2010 14:52:52 GMT
+  Server: lighttpd/1.4.25
+
+  ---
+  -
+    dst_bandwidth: STM-1
+    dst_contact: tenet.ac.za^aa
+    dst_ftp: ftp://cpan.mirror.ac.za/
+    dst_http: http://cpan.mirror.ac.za/
+    dst_location: 'Cape Town, South Africa, Africa (-33.93 18.47)'
+    dst_notes: ''
+    dst_organisation: TENET
+    dst_rsync: mirror.ac.za::cpan
+    dst_src: rsync://www.cpan.org/CPAN/
+    dst_timezone: '+2'
+    frequency: '12 Hourly'
+    hostname: mirror.ac.za
+  -
+    dst_bandwidth: 50MB
+    dst_contact: is.co.za|ftpadmin
+    dst_ftp: ftp://ftp.is.co.za/pub/cpan/
+    dst_http: http://mirror.is.co.za/pub/cpan/
+    dst_location: 'Johannesburg, Gauteng, South Africa, Africa (-26.17 28.03)'
+    dst_notes: 'Limit to 4 simultaneous connections.'
+    dst_organisation: 'Internet Solutions'
+    dst_rsync: ftp.is.co.za::IS-Mirror/ftp.cpan.org/
+    dst_src: rsync.nic.funet.fi
+    dst_timezone: '+2'
+    frequency: daily
+    hostname: is.co.za
+  -
+    dst_bandwidth: T3
+    dst_contact: saix.net=ftp
+    dst_ftp: ftp://ftp.saix.net/pub/CPAN/
+    dst_http: ''
+    dst_location: 'Parow, Western Cape, South Africa, Africa (-33.9064 18.5631)'
+    dst_notes: ''
+    dst_organisation: 'South African Internet eXchange (SAIX)'
+    dst_rsync: ''
+    dst_src: ftp.funet.fi
+    dst_timezone: '+2'
+    frequency: daily
+    hostname: saix.net
+  -
+
+etc. etc.
 
 =back
 
