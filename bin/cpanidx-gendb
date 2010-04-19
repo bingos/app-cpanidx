@@ -7,6 +7,7 @@ use DBI;
 use URI;
 use Config::Tiny;
 use CPAN::DistnameInfo;
+use Parse::CPAN::MirroredBy;
 use IO::Zlib;
 use File::Fetch;
 use File::Spec;
@@ -16,6 +17,21 @@ use Getopt::Long;
 
 my $verbose;
 my $config = 'cpanidx.ini';
+
+my $mirror_fields = [qw(
+dst_bandwidth
+dst_contact
+dst_ftp
+dst_http
+dst_location
+dst_notes
+dst_organisation
+dst_rsync
+dst_src
+dst_timezone
+frequency
+hostname
+)];
 
 GetOptions( 'config=s', \$config, 'verbose', \$verbose );
 
@@ -35,7 +51,8 @@ die "No 'url' was specified in the config file '$config', aborting\n" unless $ur
 $|=1;
 
 my $packages_file = '02packages.details.txt.gz';
-my $mailrc_file = '01mailrc.txt.gz';
+my $mailrc_file   = '01mailrc.txt.gz';
+my $mirrord_file  = 'MIRRORED.BY';
 
 my $idxdir = _cpanidx_dir();
 mkpath( $idxdir ) unless -d $idxdir;
@@ -48,6 +65,8 @@ print "Populating auths ... ";
 populate_auths($dbh,$idxdir,$mailrc_file);
 print "DONE\nPopulating dists and mods ... ";
 populate_dists($dbh,$idxdir,$packages_file);
+print "DONE\nPopulating mirrors ... ";
+populate_mirrors($dbh,$idxdir,$mirrord_file);
 print "DONE\n";
 timestamp($dbh);
 poll_server($url);
@@ -155,16 +174,43 @@ sub populate_auths {
   return 1;
 }
 
+sub populate_mirrors {
+  my ($handle,$dir,$mfile) = @_;
+
+  my $pm = Parse::CPAN::MirroredBy->new();
+
+  $handle->begin_work;
+
+  create_table( $handle, 'tmp_mirrors' );
+
+  foreach my $mirror ( $pm->parse_file( File::Spec->catfile($dir,$mfile) ) ) {
+    $mirror->{$_} = '' for grep { !$mirror->{$_} } @{ $mirror_fields };
+    my $hostname = delete $mirror->{hostname};
+    my $sth = $handle->prepare_cached(qq{INSERT INTO tmp_mirrors values(?,?,?,?,?,?,?,?,?,?,?,?)}) 
+                or die $DBI::errstr;
+    $sth->execute( $hostname, ( map { $mirror->{$_} } sort keys %{ $mirror } ) ) or die $handle->errstr;
+  }
+
+  $handle->do(qq{DROP TABLE IF EXISTS mirrors}) or die $handle->errstr;
+  $handle->do(qq{ALTER TABLE tmp_mirrors RENAME TO mirrors}) or die $handle->errstr;
+
+  $handle->commit;
+
+  return 1;
+}
+
 sub fetch_indexes {
   my ($location,$mirror,$mailrc,$packages) = @_;
 
   my $mailurl = URI->new($mirror);
   my $packurl = URI->new($mirror);
+  my $mirrord = URI->new($mirror);
 
   $mailurl->path_segments( ( grep { $_ } $mailurl->path_segments ), 'authors', $mailrc );
   $packurl->path_segments( ( grep { $_ } $packurl->path_segments ), 'modules', $packages );
+  $mirrord->path_segments( ( grep { $_ } $mirrord->path_segments ), 'MIRRORED.BY' );
 
-  foreach my $file ( $mailurl, $packurl ) {
+  foreach my $file ( $mailurl, $packurl, $mirrord ) {
     my $url = $file->as_string;
     print "Fetching '$url' to '$location'\n";
     my $ff = File::Fetch->new( uri => $url );

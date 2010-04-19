@@ -19,6 +19,7 @@ requires 'File::Spec' => '3.31';
 requires 'HTML::Tiny' => '1.05';
 requires 'IO::Zlib' => '1.10';
 requires 'JSON::XS' => '2.27';
+requires 'Parse::CPAN::MirroredBy' => 0.02;
 requires 'URI' => '1.52';
 requires 'XML::Simple' => '2.18';
 requires 'YAML::Tiny' => '1.41';

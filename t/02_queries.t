@@ -15,6 +15,7 @@ my %tests = (
   'modkeys'  => [ 'select mod_name from mods order by mod_name', 0 ],
   'authkeys' => [ 'select cpan_id from auths order by cpan_id', 0 ],
   'topten' => [ 'select cpan_id, count(*) as "dists" from dists group by cpan_id order by count(*) desc limit 10', 0 ],
+  'mirrors' => [ 'select * from mirrors', 0 ],
 );
 
 plan tests => ( scalar keys %tests ) * 4 + 1;

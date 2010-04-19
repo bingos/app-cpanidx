@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use vars qw[$VERSION];
 
-$VERSION = '0.12';
+$VERSION = '0.13_01';
 
 my $tables = {
    mods => [
@@ -28,6 +28,20 @@ my $tables = {
    timestamp => [
       'timestamp VARCHAR(30) NOT NULL',
    ],
+   mirrors => [
+      'hostname VARCHAR(50) NOT NULL',
+      'dst_bandwidth VARCHAR(50)',
+      'dst_contact VARCHAR(60)',
+      'dst_ftp VARCHAR(250)',
+      'dst_http VARCHAR(250)',
+      'dst_location TEXT', 
+      'dst_notes TEXT',
+      'dst_organisation TEXT',
+      'dst_rsync VARCHAR(250)',
+      'dst_src VARCHAR(250)',
+      'dst_timezone VARCHAR(20)',
+      'frequency VARCHAR(100)',
+   ],
 };
 
 my $indexes = {
@@ -49,7 +63,7 @@ my $indexes = {
 };
 
 # make the temp mappings
-foreach my $k ( qw( mods dists auths ) ) {
+foreach my $k ( qw( mirrors mods dists auths ) ) {
   $tables->{ 'tmp_' . $k } = $tables->{ $k };
 }
 

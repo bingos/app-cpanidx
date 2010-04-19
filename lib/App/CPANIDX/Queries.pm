@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use vars qw[$VERSION];
 
-$VERSION = '0.12';
+$VERSION = '0.13_01';
 
 my %queries = (
   'mod' => [ 'select mods.mod_name,mods.mod_vers,mods.cpan_id,dists.dist_name,dists.dist_vers,dists.dist_file from mods,dists where mod_name = ? and mods.dist_name = dists.dist_name and mods.dist_vers = dists.dist_vers', 1 ],
@@ -18,6 +18,7 @@ my %queries = (
   'modkeys'  => [ 'select mod_name from mods order by mod_name', 0 ],
   'authkeys' => [ 'select cpan_id from auths order by cpan_id', 0 ],
   'topten' => [ 'select cpan_id, count(*) as "dists" from dists group by cpan_id order by count(*) desc limit 10', 0 ],
+  'mirrors', => [ 'select * from mirrors', 0 ],
 );
 
 sub query {
