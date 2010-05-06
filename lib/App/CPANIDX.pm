@@ -5,7 +5,7 @@ use warnings;
 
 use vars qw($VERSION);
 
-$VERSION = '0.14';
+$VERSION = '0.16';
 
 1;
 
@@ -339,6 +339,63 @@ Does not take a search term. Returns a list of CPAN mirror sites as listed in th
   -
 
 etc. etc.
+
+=item C<corelist>
+
+Takes a search term which is a module name to search for. Returns information if that module is shipped
+with perl core.
+
+  curl -i http://name.of.website/cpanidx/yaml/corelist/Class::ISA
+
+  HTTP/1.1 200 OK
+  Content-type: application/x-yaml; charset=utf-8
+  Transfer-Encoding: chunked
+  Date: Thu, 06 May 2010 09:31:25 GMT
+  Server: lighttpd/1.4.25
+
+  ---
+  -
+    deprecated: 0
+    mod_vers: 0.32
+    perl_ver: 5.007003
+    released: 2002-03-05
+  -
+    deprecated: 0
+    mod_vers: 0.32
+    perl_ver: 5.008
+    released: 2002-07-19
+  -
+    deprecated: 0
+    mod_vers: 0.32
+    perl_ver: 5.008001
+    released: 2003-09-25
+  -
+    deprecated: 0
+    mod_vers: 0.32
+    perl_ver: 5.008002
+    released: 2003-11-05
+  -
+    deprecated: 0
+    mod_vers: 0.32
+    perl_ver: 5.008003
+    released: 2004-01-14
+  -
+    deprecated: 0
+    mod_vers: 0.32
+    perl_ver: 5.008004
+    released: 2004-04-21
+  -
+    deprecated: 0
+    mod_vers: 0.32
+    perl_ver: 5.008005
+    released: 2004-07-19
+  -
+    deprecated: 0
+    mod_vers: 0.32
+    perl_ver: 5.008006
+    released: 2004-11-27
+
+etc etc.
 
 =back
 

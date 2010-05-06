@@ -8,6 +8,7 @@ use URI;
 use Config::Tiny;
 use CPAN::DistnameInfo;
 use Parse::CPAN::MirroredBy;
+use Module::CoreList::DBSchema;
 use IO::Zlib;
 use File::Fetch;
 use File::Spec;
@@ -67,6 +68,8 @@ print "DONE\nPopulating dists and mods ... ";
 populate_dists($dbh,$idxdir,$packages_file);
 print "DONE\nPopulating mirrors ... ";
 populate_mirrors($dbh,$idxdir,$mirrord_file);
+print "DONE\nPopulating corelist ... ";
+populate_corelist($dbh);
 print "DONE\n";
 timestamp($dbh);
 poll_server($url);
@@ -193,6 +196,32 @@ sub populate_mirrors {
 
   $handle->do(qq{DROP TABLE IF EXISTS mirrors}) or die $handle->errstr;
   $handle->do(qq{ALTER TABLE tmp_mirrors RENAME TO mirrors}) or die $handle->errstr;
+
+  $handle->commit;
+
+  return 1;
+}
+
+sub populate_corelist {
+  my ($handle) = @_;
+
+  my $mcdbs = Module::CoreList::DBSchema->new();
+  my %tables = $mcdbs->tables();
+
+  $handle->begin_work;
+
+  create_table( $handle, 'tmp_' . $_ ) for keys %tables;
+
+  foreach my $row ( $mcdbs->data( prefix => 'tmp_' ) ) {
+    my $sql = shift @{ $row };
+    my $sth = $handle->prepare_cached($sql) or die $handle->errstr;
+    $sth->execute( @{ $row } ) or die $handle->errstr;
+  }
+
+  foreach my $table ( keys %tables ) {
+    $handle->do(qq{DROP TABLE IF EXISTS $table}) or die $handle->errstr;
+    $handle->do(qq{ALTER TABLE tmp_$table RENAME TO $table}) or die $handle->errstr;
+  }
 
   $handle->commit;
 

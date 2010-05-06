@@ -250,6 +250,118 @@ INTERFACE
                 cpan_id: MARCEL
                 dists: 114
 
+        "mirrors"
+            Does not take a search term. Returns a list of CPAN mirror sites
+            as listed in the "MIRRORED.BY" file.
+
+              curl -i http://name.of.website/cpanidx/yaml/mirrors
+
+              HTTP/1.1 200 OK
+              Content-type: application/x-yaml; charset=utf-8
+              Transfer-Encoding: chunked
+              Date: Mon, 19 Apr 2010 14:52:52 GMT
+              Server: lighttpd/1.4.25
+
+              ---
+              -
+                dst_bandwidth: STM-1
+                dst_contact: tenet.ac.za^aa
+                dst_ftp: ftp://cpan.mirror.ac.za/
+                dst_http: http://cpan.mirror.ac.za/
+                dst_location: 'Cape Town, South Africa, Africa (-33.93 18.47)'
+                dst_notes: ''
+                dst_organisation: TENET
+                dst_rsync: mirror.ac.za::cpan
+                dst_src: rsync://www.cpan.org/CPAN/
+                dst_timezone: '+2'
+                frequency: '12 Hourly'
+                hostname: mirror.ac.za
+              -
+                dst_bandwidth: 50MB
+                dst_contact: is.co.za|ftpadmin
+                dst_ftp: ftp://ftp.is.co.za/pub/cpan/
+                dst_http: http://mirror.is.co.za/pub/cpan/
+                dst_location: 'Johannesburg, Gauteng, South Africa, Africa (-26.17 28.03)'
+                dst_notes: 'Limit to 4 simultaneous connections.'
+                dst_organisation: 'Internet Solutions'
+                dst_rsync: ftp.is.co.za::IS-Mirror/ftp.cpan.org/
+                dst_src: rsync.nic.funet.fi
+                dst_timezone: '+2'
+                frequency: daily
+                hostname: is.co.za
+              -
+                dst_bandwidth: T3
+                dst_contact: saix.net=ftp
+                dst_ftp: ftp://ftp.saix.net/pub/CPAN/
+                dst_http: ''
+                dst_location: 'Parow, Western Cape, South Africa, Africa (-33.9064 18.5631)'
+                dst_notes: ''
+                dst_organisation: 'South African Internet eXchange (SAIX)'
+                dst_rsync: ''
+                dst_src: ftp.funet.fi
+                dst_timezone: '+2'
+                frequency: daily
+                hostname: saix.net
+              -
+
+            etc. etc.
+
+        "corelist"
+            Takes a search term which is a module name to search for.
+            Returns information if that module is shipped with perl core.
+
+              curl -i http://name.of.website/cpanidx/yaml/corelist/Class::ISA
+
+              HTTP/1.1 200 OK
+              Content-type: application/x-yaml; charset=utf-8
+              Transfer-Encoding: chunked
+              Date: Thu, 06 May 2010 09:31:25 GMT
+              Server: lighttpd/1.4.25
+
+              ---
+              -
+                deprecated: 0
+                mod_vers: 0.32
+                perl_ver: 5.007003
+                released: 2002-03-05
+              -
+                deprecated: 0
+                mod_vers: 0.32
+                perl_ver: 5.008
+                released: 2002-07-19
+              -
+                deprecated: 0
+                mod_vers: 0.32
+                perl_ver: 5.008001
+                released: 2003-09-25
+              -
+                deprecated: 0
+                mod_vers: 0.32
+                perl_ver: 5.008002
+                released: 2003-11-05
+              -
+                deprecated: 0
+                mod_vers: 0.32
+                perl_ver: 5.008003
+                released: 2004-01-14
+              -
+                deprecated: 0
+                mod_vers: 0.32
+                perl_ver: 5.008004
+                released: 2004-04-21
+              -
+                deprecated: 0
+                mod_vers: 0.32
+                perl_ver: 5.008005
+                released: 2004-07-19
+              -
+                deprecated: 0
+                mod_vers: 0.32
+                perl_ver: 5.008006
+                released: 2004-11-27
+
+            etc etc.
+
 AUTHOR
     Chris "BinGOs" Williams <chris@bingosnet.co.uk>
 

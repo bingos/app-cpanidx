@@ -1,4 +1,20 @@
 ==============================
+2010-04-19 16:00:33 +0100 0.14
+==============================
+
+  commit ccbcab5dfc4abaacca913f1a9803fcfbdd63f8ff
+  Author: Chris Williams <chris@bingosnet.co.uk>
+  Date:   Mon Apr 19 16:00:33 2010 +0100
+  
+    Version bump to 0.14
+
+  commit 625574c6a1fa45f8759642b7cd1fa2241a95d2ed
+  Author: Chris Williams <chris@bingosnet.co.uk>
+  Date:   Mon Apr 19 15:32:05 2010 +0100
+  
+    Added CPAN MIRRORED.BY support 
+
+==============================
 2010-04-03 00:02:12 +0100 0.12
 ==============================
 

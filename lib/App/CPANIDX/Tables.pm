@@ -2,9 +2,13 @@ package App::CPANIDX::Tables;
 
 use strict;
 use warnings;
+use Module::CoreList::DBSchema;
 use vars qw[$VERSION];
 
-$VERSION = '0.14';
+$VERSION = '0.16';
+
+my $mcdbs = Module::CoreList::DBSchema->new();
+my %cl_tables = $mcdbs->tables();
 
 my $tables = {
    mods => [
@@ -42,6 +46,7 @@ my $tables = {
       'dst_timezone VARCHAR(20)',
       'frequency VARCHAR(100)',
    ],
+   %cl_tables,
 };
 
 my $indexes = {
@@ -63,7 +68,7 @@ my $indexes = {
 };
 
 # make the temp mappings
-foreach my $k ( qw( mirrors mods dists auths ) ) {
+foreach my $k ( qw( mirrors mods dists auths ), keys %cl_tables ) {
   $tables->{ 'tmp_' . $k } = $tables->{ $k };
 }
 

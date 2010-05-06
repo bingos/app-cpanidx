@@ -1,7 +1,10 @@
 use strict;
 use warnings;
 use Test::More;
+use Module::CoreList::DBSchema;
 use App::CPANIDX::Queries;
+
+my $mcdbs = Module::CoreList::DBSchema->new();
 
 my %tests = (
   'mod' => [ 'select mods.mod_name,mods.mod_vers,mods.cpan_id,dists.dist_name,dists.dist_vers,dists.dist_file from mods,dists where mod_name = ? and mods.dist_name = dists.dist_name and mods.dist_vers = dists.dist_vers', 1 ],
@@ -17,6 +20,8 @@ my %tests = (
   'topten' => [ 'select cpan_id, count(*) as "dists" from dists group by cpan_id order by count(*) desc limit 10', 0 ],
   'mirrors' => [ 'select * from mirrors', 0 ],
 );
+
+$tests{$_} = $mcdbs->query( $_ ) for $mcdbs->queries();
 
 plan tests => ( scalar keys %tests ) * 4 + 1;
 

@@ -2,9 +2,12 @@ package App::CPANIDX::Queries;
 
 use strict;
 use warnings;
+use Module::CoreList::DBSchema;
 use vars qw[$VERSION];
 
-$VERSION = '0.14';
+$VERSION = '0.16';
+
+my $mcdbs = Module::CoreList::DBSchema->new();
 
 my %queries = (
   'mod' => [ 'select mods.mod_name,mods.mod_vers,mods.cpan_id,dists.dist_name,dists.dist_vers,dists.dist_file from mods,dists where mod_name = ? and mods.dist_name = dists.dist_name and mods.dist_vers = dists.dist_vers', 1 ],
@@ -20,6 +23,10 @@ my %queries = (
   'topten' => [ 'select cpan_id, count(*) as "dists" from dists group by cpan_id order by count(*) desc limit 10', 0 ],
   'mirrors', => [ 'select * from mirrors', 0 ],
 );
+
+foreach my $query ( $mcdbs->queries() ) {
+  $queries{ $query } = $mcdbs->query( $query );
+}
 
 sub query {
   return unless @_;
