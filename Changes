@@ -1,4 +1,15 @@
 ==============================
+2010-05-06 10:41:11 +0100 0.16
+==============================
+
+  commit 42fb2ad4995d70f43c35eb13e5a9fb9d377c4620
+  Author: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
+  Date:   Thu May 6 10:41:11 2010 +0100
+  
+    Added corelist functionality by integrating
+    Module::CoreList::DBSchema 
+
+==============================
 2010-04-19 16:00:33 +0100 0.14
 ==============================
 
