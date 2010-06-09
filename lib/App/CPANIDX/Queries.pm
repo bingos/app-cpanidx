@@ -5,7 +5,7 @@ use warnings;
 use Module::CoreList::DBSchema;
 use vars qw[$VERSION];
 
-$VERSION = '0.16';
+$VERSION = '0.18';
 
 my $mcdbs = Module::CoreList::DBSchema->new();
 

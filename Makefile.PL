@@ -11,6 +11,7 @@ perl_version '5.006';
 build_requires 'Test::More' => 0.47;
 requires 'CPAN::DistnameInfo' => '0.09';
 requires 'Config::Tiny' => '2.12';
+requires 'Date::Parse' => '2.30';
 requires 'DBI' => '1.609';
 requires 'FCGI' => '0.69';
 requires 'File::Fetch' => '0.24';

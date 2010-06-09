@@ -5,7 +5,7 @@ use warnings;
 use Module::CoreList::DBSchema;
 use vars qw[$VERSION];
 
-$VERSION = '0.16';
+$VERSION = '0.18';
 
 my $mcdbs = Module::CoreList::DBSchema->new();
 my %cl_tables = $mcdbs->tables();
@@ -31,6 +31,7 @@ my $tables = {
     ],
    timestamp => [
       'timestamp VARCHAR(30) NOT NULL',
+      'lastupdated VARCHAR(30) NOT NULL',
    ],
    mirrors => [
       'hostname VARCHAR(50) NOT NULL',

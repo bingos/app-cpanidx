@@ -7,6 +7,7 @@ use DBI;
 use URI;
 use Config::Tiny;
 use CPAN::DistnameInfo;
+use Date::Parse qw[str2time];
 use Parse::CPAN::MirroredBy;
 use Module::CoreList::DBSchema;
 use IO::Zlib;
@@ -65,21 +66,23 @@ if ( $dsn =~ /^dbi\:SQLite/i ) {
 print "Populating auths ... ";
 populate_auths($dbh,$idxdir,$mailrc_file);
 print "DONE\nPopulating dists and mods ... ";
-populate_dists($dbh,$idxdir,$packages_file);
+my $packtime = populate_dists($dbh,$idxdir,$packages_file);
 print "DONE\nPopulating mirrors ... ";
 populate_mirrors($dbh,$idxdir,$mirrord_file);
 print "DONE\nPopulating corelist ... ";
 populate_corelist($dbh);
 print "DONE\n";
-timestamp($dbh);
+timestamp($dbh,$packtime);
 poll_server($url);
 exit 0;
 
 sub timestamp {
   my $handle = shift;
+  my $packages = shift;
+  $handle->do(qq{DROP TABLE IF EXISTS timestamp}) or die $handle->errstr;
   create_table( $handle, 'timestamp' );
-  my $sth = $handle->prepare_cached(qq{INSERT INTO timestamp values (?)}) or die $handle->errstr;
-  $sth->execute( time );
+  my $sth = $handle->prepare_cached(qq{INSERT INTO timestamp values (?,?)}) or die $handle->errstr;
+  $sth->execute( time, $packages );
   return 1;
 }
 
@@ -98,8 +101,13 @@ sub populate_dists {
   my %dists;
   my @mods;
 
+  my $time;
+
   while (<$fh>) {
+    chomp;
     last if /^\s*$/;
+    my($field,$data) = split /\:\s+/;
+    $time = str2time($data) if $field eq 'Last-Updated';
   }
   while (<$fh>) {
     chomp;
@@ -141,7 +149,7 @@ sub populate_dists {
 
   $handle->commit;
 
-  return 1;
+  return $time;
 }
 
 sub populate_auths {

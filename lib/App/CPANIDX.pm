@@ -5,7 +5,7 @@ use warnings;
 
 use vars qw($VERSION);
 
-$VERSION = '0.16';
+$VERSION = '0.18';
 
 1;
 
@@ -224,20 +224,21 @@ etc, etc.
 
 =item C<timestamp>
 
-Does not take a search term. Returns a timestamp of when the CPAN Index Database was last updated.
-The timestamp is in epoch time.
+Does not take a search term. Returns a timestamp of when the CPAN Index Database was last updated
+and when the packages file that was used was last updated. Both values are in epoch time.
 
   curl -i http://name.of.website/cpanidx/yaml/timestamp
 
   HTTP/1.1 200 OK
   Content-type: application/x-yaml; charset=utf-8
   Transfer-Encoding: chunked
-  Date: Thu, 04 Mar 2010 11:42:09 GMT
+  Date: Wed, 09 Jun 2010 10:16:15 GMT
   Server: lighttpd/1.4.25
 
   ---
   -
-    timestamp: 1267700434
+    lastupdated: 1276075625
+    timestamp: 1276077865
 
 =item C<topten>
 
