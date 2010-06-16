@@ -1,5 +1,6 @@
 use strict;
 use inc::Module::Install;
+local $ENV{X_MYMETA} = 1;
 name 'App-CPANIDX';
 author 'Chris Williams <chris@bingosnet.co.uk>';
 version_from 'lib/App/CPANIDX.pm';
