@@ -48,7 +48,6 @@ my $url = $cfg->{_}->{url};
 my $mirror = $cfg->{_}->{mirror} || 'ftp://ftp.funet.fi/pub/CPAN/';
 
 die "No 'dsn' was specified in the config file '$config', aborting\n" unless $dsn;
-die "No 'url' was specified in the config file '$config', aborting\n" unless $url;
 
 $|=1;
 
@@ -73,7 +72,7 @@ print "DONE\nPopulating corelist ... ";
 populate_corelist($dbh);
 print "DONE\n";
 timestamp($dbh,$packtime);
-poll_server($url);
+poll_server($url) if $url;
 exit 0;
 
 sub timestamp {
