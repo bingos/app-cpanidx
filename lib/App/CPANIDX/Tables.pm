@@ -5,7 +5,7 @@ use warnings;
 use Module::CoreList::DBSchema;
 use vars qw[$VERSION];
 
-$VERSION = '0.20';
+$VERSION = '0.22';
 
 my $mcdbs = Module::CoreList::DBSchema->new();
 my %cl_tables = $mcdbs->tables();
