@@ -39,15 +39,26 @@ GetOptions( 'config=s', \$config, 'verbose', \$verbose );
 
 my $ini = Config::Tiny->new();
 
-my $cfg = $ini->read( $config ) or die $ini->errstr, "\n";
+my $dsn;
+my $user;
+my $pass;
+my $url;
+my $mirror = 'ftp://ftp.funet.fi/pub/CPAN/';
 
-my $dsn = $cfg->{_}->{dsn};
-my $user = $cfg->{_}->{user};
-my $pass = $cfg->{_}->{pass};
-my $url = $cfg->{_}->{url};
-my $mirror = $cfg->{_}->{mirror} || 'ftp://ftp.funet.fi/pub/CPAN/';
+my $cfg = $ini->read( $config ) or warn $ini->errstr, "\n";
 
-die "No 'dsn' was specified in the config file '$config', aborting\n" unless $dsn;
+if ( $cfg ) {
+  $dsn = $cfg->{_}->{dsn};
+  $user = $cfg->{_}->{user};
+  $pass = $cfg->{_}->{pass};
+  $url = $cfg->{_}->{url};
+  $mirror = $cfg->{_}->{mirror} || 'ftp://ftp.funet.fi/pub/CPAN/';
+}
+
+unless ( $dsn ) {
+  $dsn = 'dbi:SQLite:dbname=cpanidx.db';
+  warn "Using '$dsn'\n";
+}
 
 $|=1;
 

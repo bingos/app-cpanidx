@@ -1,6 +1,29 @@
 ==============================
-9999-99-99 99:99:99 +0000 HEAD
+2010-07-14 13:41:56 +0100 0.20
 ==============================
+
+  commit f619eba3589df527ea7fdfc04a0170da687835fd
+  Author: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
+  Date:   Wed Jul 14 13:41:56 2010 +0100
+  
+    Make the 'url' parameter optional for the cpanidx-gendb script
+
+  commit 43fe7c2bb247b9fec0eb5e9a674bde3b4290b0e9
+  Author: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
+  Date:   Wed Jun 16 15:04:34 2010 +0100
+  
+    Write MYMETA.yml file. 
+
+==============================
+2010-06-09 11:18:37 +0100 0.18
+==============================
+
+  commit a46424ef7ea551a4046a8ef8e477a2b2be07900d
+  Author: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
+  Date:   Wed Jun 9 11:18:37 2010 +0100
+  
+    Added lastupdated to the timestamp table which is when the packages
+    file we used was last updated
 
   commit 83de37da7ff5e452af3d866fed308c3c860b61ba
   Author: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
