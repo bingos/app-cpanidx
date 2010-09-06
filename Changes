@@ -1,4 +1,20 @@
 ==============================
+2010-07-27 22:16:04 +0100 0.22
+==============================
+
+  commit a505b717f380bf26ab6b39e01e9a72140982994c
+  Author: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
+  Date:   Tue Jul 27 22:16:04 2010 +0100
+  
+    Bump version to 0.22
+
+  commit 561cbea48a6a103df47cdab8d80aa9bcc38eda7d
+  Author: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
+  Date:   Tue Jul 27 22:15:16 2010 +0100
+  
+    Make everything optional for cpanidx-gendb 
+
+==============================
 2010-07-14 13:41:56 +0100 0.20
 ==============================
 

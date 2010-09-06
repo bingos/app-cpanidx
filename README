@@ -104,7 +104,7 @@ INTERFACE
 
         "mod"
             Takes a search term which is a module name to search for.
-            Returns information relating that module if it exists.
+            Returns information relating to that module if it exists.
 
               curl -i http://name.of.website/cpanidx/yaml/mod/LWP
 
@@ -122,6 +122,25 @@ INTERFACE
                 dist_vers: 5.834
                 mod_name: LWP
                 mod_vers: 5.834
+
+        "dist"
+            Takes a search term which is a distribution name to search for.
+            Returns information relating to that distribution if it exists.
+
+              curl -i http://name.of.website/cpanidx/yaml/dist/CPANPLUS-Dist-Build
+
+              HTTP/1.1 200 OK
+              Content-type: application/x-yaml; charset=utf-8
+              Transfer-Encoding: chunked
+              Date: Mon, 06 Sep 2010 14:02:23 GMT
+              Server: lighttpd/1.4.25
+
+              ---
+              -
+                cpan_id: BINGOS
+                dist_file: B/BI/BINGOS/CPANPLUS-Dist-Build-0.48.tar.gz
+                dist_name: CPANPLUS-Dist-Build
+                dist_vers: 0.48
 
         "auth"
             Takes a search term which is the CPAN ID of an author to search

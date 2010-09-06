@@ -5,12 +5,13 @@ use warnings;
 use Module::CoreList::DBSchema;
 use vars qw[$VERSION];
 
-$VERSION = '0.22';
+$VERSION = '0.24';
 
 my $mcdbs = Module::CoreList::DBSchema->new();
 
 my %queries = (
   'mod' => [ 'select mods.mod_name,mods.mod_vers,mods.cpan_id,dists.dist_name,dists.dist_vers,dists.dist_file from mods,dists where mod_name = ? and mods.dist_name = dists.dist_name and mods.dist_vers = dists.dist_vers', 1 ],
+  'dist' => [ 'select * from dists where dist_name = ?', 1 ],
   'auth' => [ 'select * from auths where cpan_id = ?', 1 ],
   'dists' => [ 'select * from dists where cpan_id = ?', 1 ],
   'timestamp' => [ 'select * from timestamp', 0 ],

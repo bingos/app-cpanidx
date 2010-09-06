@@ -5,7 +5,7 @@ use warnings;
 
 use vars qw($VERSION);
 
-$VERSION = '0.22';
+$VERSION = '0.24';
 
 1;
 
@@ -136,7 +136,7 @@ The command may be one of the following:
 
 =item C<mod>
 
-Takes a search term which is a module name to search for. Returns information relating that module if it
+Takes a search term which is a module name to search for. Returns information relating to that module if it
 exists.
 
   curl -i http://name.of.website/cpanidx/yaml/mod/LWP
@@ -155,6 +155,26 @@ exists.
     dist_vers: 5.834
     mod_name: LWP
     mod_vers: 5.834
+
+=item C<dist>
+
+Takes a search term which is a distribution name to search for. Returns information relating to that
+distribution if it exists.
+
+  curl -i http://name.of.website/cpanidx/yaml/dist/CPANPLUS-Dist-Build
+
+  HTTP/1.1 200 OK
+  Content-type: application/x-yaml; charset=utf-8
+  Transfer-Encoding: chunked
+  Date: Mon, 06 Sep 2010 14:02:23 GMT
+  Server: lighttpd/1.4.25
+
+  ---
+  -
+    cpan_id: BINGOS
+    dist_file: B/BI/BINGOS/CPANPLUS-Dist-Build-0.48.tar.gz
+    dist_name: CPANPLUS-Dist-Build
+    dist_vers: 0.48
 
 =item C<auth>
 
