@@ -14,7 +14,7 @@ my $tables = {
    mods => [
       'mod_name VARCHAR(300) NOT NULL',
       'dist_name VARCHAR(190) NOT NULL',
-      'dist_vers VARCHAR(20)',
+      'dist_vers VARCHAR(50)',
       'cpan_id VARCHAR(20) NOT NULL',
       'mod_vers VARCHAR(30)',
     ],
@@ -22,7 +22,7 @@ my $tables = {
       'dist_name VARCHAR(190) NOT NULL',
       'cpan_id VARCHAR(20) NOT NULL',
       'dist_file VARCHAR(400) NOT NULL',
-      'dist_vers VARCHAR(20)',
+      'dist_vers VARCHAR(50)',
     ],
    auths => [
       'cpan_id VARCHAR(20) NOT NULL',
