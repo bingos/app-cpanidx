@@ -1,4 +1,20 @@
 ==============================
+2010-11-02 12:40:45 +0000 0.26
+==============================
+
+  commit 51cd6d674d301bd3c54a2b12c51883407608ee04
+  Author: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
+  Date:   Tue Nov 2 12:40:45 2010 +0000
+  
+    Bump version to 0.26
+
+  commit 0fd43148a2638bb552a04e74e9d9f89c1bf75061
+  Author: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
+  Date:   Tue Nov 2 09:21:26 2010 +0000
+  
+    Extend size of dist_vers columns to handle 'withoutworldwriteables' 
+
+==============================
 2010-09-06 15:15:43 +0100 0.24
 ==============================
 
