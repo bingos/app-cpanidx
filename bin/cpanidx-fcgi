@@ -51,7 +51,7 @@ sub _search_db {
   my ($type,$search) = @_;
   my @results;
   if ( my $sql = App::CPANIDX::Queries->query( $type ) ) {
-    if ( ( $type eq 'mod' or $type eq 'corelist' ) 
+    if ( ( $type eq 'mod' or $type eq 'corelist' or $type eq 'perms' )
          and !( $search =~ m#\A[a-zA-Z_][0-9a-zA-Z_]*(?:(::|')[0-9a-zA-Z_]+)*\z# ) ) {
       return @results;
     }

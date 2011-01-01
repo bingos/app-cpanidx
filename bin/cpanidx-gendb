@@ -64,11 +64,12 @@ $|=1;
 
 my $packages_file = '02packages.details.txt.gz';
 my $mailrc_file   = '01mailrc.txt.gz';
+my $perms_file    = '06perms.txt.gz';
 my $mirrord_file  = 'MIRRORED.BY';
 
 my $idxdir = _cpanidx_dir();
 mkpath( $idxdir ) unless -d $idxdir;
-fetch_indexes($idxdir,$mirror,$mailrc_file,$packages_file);
+fetch_indexes($idxdir,$mirror,$mailrc_file,$packages_file,$perms_file);
 my $dbh = DBI->connect($dsn,$user,$pass);
 if ( $dsn =~ /^dbi\:SQLite/i ) {
   $dbh->do(qq{PRAGMA synchronous = OFF}) or die $dbh->errstr;
@@ -79,6 +80,8 @@ print "DONE\nPopulating dists and mods ... ";
 my $packtime = populate_dists($dbh,$idxdir,$packages_file);
 print "DONE\nPopulating mirrors ... ";
 populate_mirrors($dbh,$idxdir,$mirrord_file);
+print "DONE\nPopulating CPAN perms ... ";
+populate_perms($dbh,$idxdir,$perms_file);
 print "DONE\nPopulating corelist ... ";
 populate_corelist($dbh);
 print "DONE\n";
@@ -160,6 +163,37 @@ sub populate_dists {
   $handle->commit;
 
   return $time;
+}
+
+sub populate_perms {
+  my ($handle,$dir,$pfile) = @_;
+  my $fh = IO::Zlib->new( File::Spec->catfile($dir,$pfile), "rb" ) or die "$!\n";
+
+  while (<$fh>) {
+    last if /^\s*$/;
+  }
+
+  $handle->begin_work;
+
+  create_table( $handle, 'tmp_perms' );
+
+  while (<$fh>) {
+    chomp;
+    my ($mod,$id,$perm) = split /,/;
+    my $sth = $handle->prepare_cached(qq{INSERT INTO tmp_perms values (?,?,?)}) or die $handle->errstr;
+    $sth->execute( $mod, $id, $perm ) or die $handle->errstr;
+  }
+
+  $handle->do(qq{DROP TABLE IF EXISTS perms}) or die $handle->errstr;
+  $handle->do(qq{ALTER TABLE tmp_perms RENAME TO perms}) or die $handle->errstr;
+
+  foreach my $sql ( @{ App::CPANIDX::Tables->index( 'perms' ) } ) {
+    $handle->do( $sql ) or die $handle->errstr;
+  }
+
+  $handle->commit;
+
+  return 1;
 }
 
 sub populate_auths {
@@ -247,17 +281,19 @@ sub populate_corelist {
 }
 
 sub fetch_indexes {
-  my ($location,$mirror,$mailrc,$packages) = @_;
+  my ($location,$mirror,$mailrc,$packages,$perms) = @_;
 
   my $mailurl = URI->new($mirror);
   my $packurl = URI->new($mirror);
   my $mirrord = URI->new($mirror);
+  my $permurl = URI->new($mirror);
 
   $mailurl->path_segments( ( grep { $_ } $mailurl->path_segments ), 'authors', $mailrc );
   $packurl->path_segments( ( grep { $_ } $packurl->path_segments ), 'modules', $packages );
+  $permurl->path_segments( ( grep { $_ } $permurl->path_segments ), 'modules', $perms );
   $mirrord->path_segments( ( grep { $_ } $mirrord->path_segments ), 'MIRRORED.BY' );
 
-  foreach my $file ( $mailurl, $packurl, $mirrord ) {
+  foreach my $file ( $mailurl, $packurl, $permurl, $mirrord ) {
     my $url = $file->as_string;
     print "Fetching '$url' to '$location'\n";
     my $ff = File::Fetch->new( uri => $url );

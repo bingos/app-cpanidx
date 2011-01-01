@@ -47,6 +47,11 @@ my $tables = {
       'dst_timezone VARCHAR(20)',
       'frequency VARCHAR(100)',
    ],
+   perms => [
+      'mod_name VARCHAR(300) NOT NULL',
+      'cpan_id VARCHAR(20) NOT NULL',
+      'perm VARCHAR(20)',
+   ],
    %cl_tables,
 };
 
@@ -66,10 +71,14 @@ my $indexes = {
     auths => [
       'CREATE INDEX auths_cpan_id ON auths ( cpan_id )',
     ],
+    perms => [
+      'CREATE INDEX perms_mod_name ON perms ( mod_name )',
+      'CREATE INDEX perms_cpan_id ON perms ( cpan_id )',
+    ],
 };
 
 # make the temp mappings
-foreach my $k ( qw( mirrors mods dists auths ), keys %cl_tables ) {
+foreach my $k ( qw( mirrors mods dists auths perms ), keys %cl_tables ) {
   $tables->{ 'tmp_' . $k } = $tables->{ $k };
 }
 
