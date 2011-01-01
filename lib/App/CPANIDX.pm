@@ -242,6 +242,28 @@ CPAN.
 
 etc, etc.
 
+=item C<perms>
+
+Takes a search term which is a module name to search for. Returns CPAN permissions relating to 
+that module if it exists.
+
+The permission is one of C<m> for C<modulelist>, C<f> for C<first-come> and
+C<c> for C<co-maint>.
+
+  curl -i http://name.of.website/cpanidx/yaml/perms/POE::Component::SmokeBox::Dists
+
+  HTTP/1.1 200 OK
+  Content-type: application/x-yaml; charset=utf-8
+  Transfer-Encoding: chunked
+  Date: Thu, 04 Mar 2010 11:39:14 GMT
+  Server: lighttpd/1.4.25
+
+  ---
+  -
+    mod_name: POE::Component::SmokeBox::Dists
+    cpan_id: BINGOS
+    perms: f
+
 =item C<timestamp>
 
 Does not take a search term. Returns a timestamp of when the CPAN Index Database was last updated
