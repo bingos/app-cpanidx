@@ -44,6 +44,18 @@ CONFIGURATION
         This is the socket that FCGI should listen on for requests. It is a
         mandatory requirement for the "cpanidx-fcgi" script.
 
+    "skipcore"
+        Applicable to the "cpanidx-gendb" script, will skip the generation
+        of the Module::CoreList based tables.
+
+    "skipmirrors"
+        Applicable to the "cpanidx-gendb" script, will skip the generation
+        of the mirrorlist based tables.
+
+    "skipperms"
+        Applicable to the "cpanidx-gendb" script, will skip the generation
+        of the CPAN permissions based tables.
+
 SCRIPTS
     Both the scripts will by default look for a "cpanidx.ini" file in the
     current working directory unless you specify an alternative with the
