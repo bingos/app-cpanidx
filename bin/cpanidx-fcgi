@@ -65,6 +65,7 @@ sub _search_db {
     else {
       warn $DBI::errstr, "\n";
       return @results;
+    }
   }
   return @results;
 }
