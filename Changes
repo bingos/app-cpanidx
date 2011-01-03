@@ -1,4 +1,32 @@
 ==============================
+2011-01-01 23:55:45 +0000 0.28
+==============================
+
+  commit db1321ddf049fa7098bb040146863291cab8e38d
+  Author: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
+  Date:   Sat Jan 1 23:55:45 2011 +0000
+  
+    Update version to 0.28
+
+  commit d602cfe7ed460983195fbdb922cf3982c99c7045
+  Author: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
+  Date:   Sat Jan 1 23:55:09 2011 +0000
+  
+    Update docs for new 'perms' query
+
+  commit b0dbb8bebc893e117ad0887a1d87a4acb155a450
+  Author: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
+  Date:   Sat Jan 1 23:28:15 2011 +0000
+  
+    Added CPAN permissions data
+
+  commit e479ffc864179bb586c0b7a825c03775368258b5
+  Author: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
+  Date:   Tue Nov 2 12:43:43 2010 +0000
+  
+    Post release changes 
+
+==============================
 2010-11-02 12:40:45 +0000 0.26
 ==============================
 

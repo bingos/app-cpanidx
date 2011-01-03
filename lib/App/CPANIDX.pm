@@ -66,6 +66,21 @@ supplied it defaults to the Funet site L<ftp://ftp.funet.fi/pub/CPAN/>.
 This is the socket that L<FCGI> should listen on for requests. It is a mandatory requirement for the
 C<cpanidx-fcgi> script.
 
+=item C<skipcore>
+
+Applicable to the C<cpanidx-gendb> script, will skip the generation of the L<Module::CoreList>
+based tables.
+
+=item C<skipmirrors>
+
+Applicable to the C<cpanidx-gendb> script, will skip the generation of the mirrorlist
+based tables.
+
+=item C<skipperms>
+
+Applicable to the C<cpanidx-gendb> script, will skip the generation of the CPAN permissions
+based tables.
+
 =back
 
 =head1 SCRIPTS

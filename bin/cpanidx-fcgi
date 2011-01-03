@@ -56,11 +56,15 @@ sub _search_db {
       return @results;
     }
     # send query to dbi
-    my $sth = $dbh->prepare_cached( $sql->[0] ) or die $DBI::errstr, "\n";
-    $sth->execute( ( $sql->[1] ? $search : () ) );
-    while ( my $row = $sth->fetchrow_hashref() ) {
-       push @results, { %{ $row } };
+    if ( my $sth = $dbh->prepare_cached( $sql->[0] ) ) {
+      $sth->execute( ( $sql->[1] ? $search : () ) );
+      while ( my $row = $sth->fetchrow_hashref() ) {
+        push @results, { %{ $row } };
+      }
     }
+    else {
+      warn $DBI::errstr, "\n";
+      return @results;
   }
   return @results;
 }

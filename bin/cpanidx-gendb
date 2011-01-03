@@ -43,6 +43,9 @@ my $dsn;
 my $user;
 my $pass;
 my $url;
+my $corelist;
+my $mirrorlist;
+my $cpanperms;
 my $mirror = 'ftp://ftp.funet.fi/pub/CPAN/';
 
 my $cfg = $ini->read( $config ) or warn $ini->errstr, "\n";
@@ -52,6 +55,9 @@ if ( $cfg ) {
   $user = $cfg->{_}->{user};
   $pass = $cfg->{_}->{pass};
   $url = $cfg->{_}->{url};
+  $corelist = $cfg->{_}->{skipcore};
+  $mirrorlist = $cfg->{_}->{skipmirrors};
+  $cpanperms = $cfg->{_}->{skipperms};
   $mirror = $cfg->{_}->{mirror} || 'ftp://ftp.funet.fi/pub/CPAN/';
 }
 
@@ -78,12 +84,27 @@ print "Populating auths ... ";
 populate_auths($dbh,$idxdir,$mailrc_file);
 print "DONE\nPopulating dists and mods ... ";
 my $packtime = populate_dists($dbh,$idxdir,$packages_file);
-print "DONE\nPopulating mirrors ... ";
-populate_mirrors($dbh,$idxdir,$mirrord_file);
-print "DONE\nPopulating CPAN perms ... ";
-populate_perms($dbh,$idxdir,$perms_file);
-print "DONE\nPopulating corelist ... ";
-populate_corelist($dbh);
+unless ( $mirrorlist ) {
+  print "DONE\nPopulating mirrors ... ";
+  populate_mirrors($dbh,$idxdir,$mirrord_file);
+}
+else {
+  print "DONE\nSkipping mirrors ... ";
+}
+unless ( $cpanperms ) {
+  print "DONE\nPopulating CPAN perms ... ";
+  populate_perms($dbh,$idxdir,$perms_file);
+}
+else {
+  print "DONE\nSkipping CPAN perms ... ";
+}
+unless ( $corelist ) {
+  print "DONE\nPopulating corelist ... ";
+  populate_corelist($dbh);
+}
+else {
+  print "DONE\nSkipping corelist ... ";
+}
 print "DONE\n";
 timestamp($dbh,$packtime);
 poll_server($url) if $url;
