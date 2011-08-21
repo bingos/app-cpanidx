@@ -39,7 +39,7 @@ my $tables = {
       'dst_contact VARCHAR(60)',
       'dst_ftp VARCHAR(250)',
       'dst_http VARCHAR(250)',
-      'dst_location TEXT', 
+      'dst_location TEXT',
       'dst_notes TEXT',
       'dst_organisation TEXT',
       'dst_rsync VARCHAR(250)',

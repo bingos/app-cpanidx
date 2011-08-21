@@ -18,30 +18,30 @@ my %types = (
 );
 
 my %renderers = (
-  'yaml', sub { 
-                my $ref = shift; 
-                my $string; 
-                eval { $string = YAML::Tiny::Dump( $ref ); }; 
-                return $string; 
+  'yaml', sub {
+                my $ref = shift;
+                my $string;
+                eval { $string = YAML::Tiny::Dump( $ref ); };
+                return $string;
           },
-  'json', sub { 
-                my $ref = shift; 
-                my $string; 
-                eval { $string = encode_json( $ref ); }; 
-                return $string; 
+  'json', sub {
+                my $ref = shift;
+                my $string;
+                eval { $string = encode_json( $ref ); };
+                return $string;
           },
-  'xml',  sub { 
-                my $ref = shift; 
+  'xml',  sub {
+                my $ref = shift;
                 my $type = shift || 'opt';
                 my %data;
                 $data{$type} = $ref;
-                my $string; 
+                my $string;
                 eval { $string = XMLout(\%data, RootName => 'results' ); };
-                return $string; 
+                return $string;
           },
-  'html', sub { 
-                my $ref = shift; 
-                return _gen_html( @{ $ref } );; 
+  'html', sub {
+                my $ref = shift;
+                return _gen_html( @{ $ref } );;
           },
 );
 
@@ -124,7 +124,7 @@ App::CPANIDX::Renderer renders web content for L<App::CPANIDX>.
 
 =item C<new>
 
-Returns a new App::CPANIDX::Renderer object. Takes two parameters, an arrayref of 
+Returns a new App::CPANIDX::Renderer object. Takes two parameters, an arrayref of
 data to be rendered, which is required, and the format, either C<yaml>, C<json>, C<xml>
 or C<html>, to render to, which defaults to C<yaml>.
 

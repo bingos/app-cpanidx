@@ -262,7 +262,7 @@ sub populate_mirrors {
   foreach my $mirror ( $pm->parse_file( File::Spec->catfile($dir,$mfile) ) ) {
     $mirror->{$_} = '' for grep { !$mirror->{$_} } @{ $mirror_fields };
     my $hostname = delete $mirror->{hostname};
-    my $sth = $handle->prepare_cached(qq{INSERT INTO tmp_mirrors values(?,?,?,?,?,?,?,?,?,?,?,?)}) 
+    my $sth = $handle->prepare_cached(qq{INSERT INTO tmp_mirrors values(?,?,?,?,?,?,?,?,?,?,?,?)})
                 or die $DBI::errstr;
     $sth->execute( $hostname, ( map { $mirror->{$_} } sort keys %{ $mirror } ) ) or die $handle->errstr;
   }
@@ -336,8 +336,8 @@ sub poll_server {
 }
 
 sub _cpanidx_dir {
-  return $ENV{PERL5_CPANIDX_DIR} 
-     if  exists $ENV{PERL5_CPANIDX_DIR} 
+  return $ENV{PERL5_CPANIDX_DIR}
+     if  exists $ENV{PERL5_CPANIDX_DIR}
      && defined $ENV{PERL5_CPANIDX_DIR};
 
   my @os_home_envs = qw( APPDATA HOME USERPROFILE WINDIR SYS$LOGIN );

@@ -101,12 +101,12 @@ by setting the C<PERL5_CPANIDX_DIR> environment variable to a different location
 In tests a L<DBD::SQLite> database took over 3 minutes to generate and a L<DBD::mysql> database
 took 30 seconds.
 
-It is recommended that one uses cron or some such scheduler to run this script every hour to 
+It is recommended that one uses cron or some such scheduler to run this script every hour to
 ensure freshness of the CPAN index.
 
 =item C<cpanidx-fcgi>
 
-Presents the CPAN index to web clients via FastCGI. Specify a socket that the script should 
+Presents the CPAN index to web clients via FastCGI. Specify a socket that the script should
 listen for requests on and configure your webserver accordingly.
 
 The following is an example for Lighttpd:
@@ -259,7 +259,7 @@ etc, etc.
 
 =item C<perms>
 
-Takes a search term which is a module name to search for. Returns CPAN permissions relating to 
+Takes a search term which is a module name to search for. Returns CPAN permissions relating to
 that module if it exists.
 
 The permission is one of C<m> for C<modulelist>, C<f> for C<first-come> and
