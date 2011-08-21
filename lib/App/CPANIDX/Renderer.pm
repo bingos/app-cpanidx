@@ -27,7 +27,7 @@ my %renderers = (
   'json', sub {
                 my $ref = shift;
                 my $string;
-                eval { $string = encode_json( $ref ); };
+                eval { $string = JSON::XS->new->utf(1)->pretty(1)->encode( $ref ); };
                 return $string;
           },
   'xml',  sub {
