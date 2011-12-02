@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 9;
+use Test::More tests => 13;
 use App::CPANIDX::Renderer;
 
 my $data = [
@@ -28,4 +28,5 @@ foreach my $enc ( qw(yaml json xml html) ) {
   isa_ok( $ren, 'App::CPANIDX::Renderer' );
   my ($type,$content) = $ren->render('auth');
   is( $type, $types{ $enc }, "$enc type is okay" );
+  ok( $content, "There is $type content" );
 }

@@ -8,7 +8,7 @@ use XML::Simple;
 use HTML::Tiny;
 use vars qw[$VERSION];
 
-$VERSION = '0.32';
+$VERSION = '0.34';
 
 my %types = (
   'yaml', 'application/x-yaml; charset=utf-8',
@@ -27,7 +27,7 @@ my %renderers = (
   'json', sub {
                 my $ref = shift;
                 my $string;
-                eval { $string = JSON::XS->new->utf(1)->pretty(1)->encode( $ref ); };
+                eval { $string = JSON::XS->new->utf8(1)->pretty(1)->encode( $ref ); };
                 return $string;
           },
   'xml',  sub {
