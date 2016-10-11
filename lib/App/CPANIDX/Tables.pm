@@ -5,7 +5,7 @@ use warnings;
 use Module::CoreList::DBSchema;
 use vars qw[$VERSION];
 
-$VERSION = '0.36';
+$VERSION = '0.38';
 
 my $mcdbs = Module::CoreList::DBSchema->new();
 my %cl_tables = $mcdbs->tables();
@@ -26,7 +26,7 @@ my $tables = {
     ],
    auths => [
       'cpan_id VARCHAR(20) NOT NULL',
-      'fullname VARCHAR(60) NOT NULL',
+      'fullname VARCHAR(255) NOT NULL',
       'email TEXT',
     ],
    timestamp => [
